@@ -10,25 +10,25 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      component: () => import(/* webpackChunkName: "about" */ './views/Home.vue'),
+      meta: {
+        layout: 'default'
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import(/* webpackChunkName: "about" */ './views/Login.vue'),
       meta: {
         layout: 'auth'
       }
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      path: '/register',
+      name: 'register',
+      component: () => import(/* webpackChunkName: "contact" */ './views/Register.vue'),
       meta: {
-        layout: 'admin'
-      }
-    },
-    {
-      path: '/contact',
-      name: 'contact',
-      component: () => import(/* webpackChunkName: "contact" */ './views/Contact.vue'),
-      meta: {
-        layout: 'admin'
+        layout: 'auth'
       }
     },
     {

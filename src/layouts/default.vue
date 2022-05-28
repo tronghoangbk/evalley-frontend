@@ -1,16 +1,16 @@
 <template>
   <div>
-    <AdminHeader/>
+    <DefaultHeader />
     <router-view/>
   </div>
 </template>
 
 <script>
-import AdminHeader from '../components/partials/AdminHeader.vue'
+import DefaultHeader from '../components/partials/DefaultHeader.vue'
 export default {
   name: 'admin',
   components: {
-    AdminHeader
+    DefaultHeader
   }
 }
 </script>

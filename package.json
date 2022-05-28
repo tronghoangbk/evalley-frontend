@@ -10,7 +10,8 @@
   "dependencies": {
     "vue": "^2.5.17",
     "vue-extend-layout": "^2.0.5",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue3-star-ratings": "^1.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.1",
