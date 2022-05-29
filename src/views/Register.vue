@@ -26,7 +26,7 @@
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                     <div class="form-floating flex-fill mb-0">
-                      <input @click="focus" type="email" v-model="email" class="form-control" required placeholder="name@example.com"/>
+                      <input @click="focus" type="email" v-model="email" class="form-control" required />
                       <label class="form-label">Your Email</label>
                       <div class="invalid-feedback">
                         Email is required.
