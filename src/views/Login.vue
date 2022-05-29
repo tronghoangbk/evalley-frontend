@@ -22,17 +22,17 @@
                     <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
 
                     <div class="form-floating mb-4">
-                        <input type="email" class="form-control" id="email" placeholder="name@example.com">
-                        <label for="email">Email address</label>
+                        <input type="text" class="form-control" v-model="username" placeholder="name@example.com">
+                        <label>Username</label>
                     </div>
 
                     <div class="form-floating mb-4">
-                        <input type="password" class="form-control" id="password" placeholder="name@example.com">
+                        <input type="password" class="form-control" v-model="password" placeholder="name@example.com">
                         <label for="password">Password</label>
                     </div>
 
                     <div class="pt-1 mb-4">
-                        <button class="btn btn-dark btn-lg btn-block" type="button">Login</button>
+                        <button class="btn btn-dark btn-lg btn-block" @click="handleSubmit">Login</button>
                     </div>
 
                     <a class="small text-muted" href="#!">Forgot password?</a>
@@ -51,44 +51,70 @@
     </section>
 </template>
 <script>
-    // const {BASE_URL} =  require('../utils/config')
-    // export default {
-    //     data(){
-    //         return {
-    //             email : "",
-    //             password : ""
-    //         }
-    //     },
-    //     methods : {
-    //         handleSubmit(e){
-    //             e.preventDefault()
-    //             if (this.password.length > 0) {
-    //                 this.$http.post(`${BASE_URL}/user/login`, {
-    //                     username: this.email,
-    //                     password: this.password
-    //                 })
-    //                 .then(response => {
-    //                     console.log(response.data.userinfo)
-    //                     if(response.data.userinfo){
-    //                         console.log("1")
-    //                         localStorage.setItem('user',JSON.stringify(response.data.userinfo));
-    //                         localStorage.setItem('token',response.data.token);
-    //                         if (localStorage.getItem('token') != null){
-    //                             this.$emit('loggedIn')
-    //                             if(this.$route.params.nextUrl != null){
-    //                                 this.$router.push(this.$route.params.nextUrl)
-    //                             }
-    //                             else {
-    //                                 this.$router.push('listproject');
-    //                             }
-    //                         }                 
-    //                     }
-    //                 })
-    //                 .catch(function (error) {
-    //                     console.error(error.response);
-    //                 });
-    //             }
-    //         }
-    //     }
-    // }
+    const {BASE_URL} =  require('../utils/config')
+    export default {
+        data(){
+            return {
+                username : "",
+                password : ""
+            }
+        },
+        methods : {
+            handleSubmit(e){
+                e.preventDefault()
+                this.$http.post(`${BASE_URL}/user/login`, {
+                    username: this.username,
+                    password: this.password
+                })
+                .then(response => {
+                    console.log(response)
+                    if (response.data.success) {
+                            localStorage.setItem('user', JSON.stringify(response.data.user))
+                            localStorage.setItem('token', response.data.token)
+                            if (localStorage.getItem('token') != null){
+                                this.$emit('loggedIn')
+                                if(this.$route.params.nextUrl != null){
+                                    this.$router.push(this.$route.params.nextUrl)
+                                }
+                                else {
+                                    var user = JSON.parse(localStorage.getItem('user'))
+                                    if(user.role == 'admin'){
+                                        this.$router.push('/admin')
+                                    }
+                                    else {
+                                        this.$router.push('/')
+                                    }
+                                }
+                            }            
+                   
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.data.message,
+                            confirmButtonColor: 'var(--primary-color)',
+                            confirmButtonText: 'Close',
+                        });
+                    }
+                    // if(response.data.userinfo){
+                    //     console.log("1")
+                    //     localStorage.setItem('user',JSON.stringify(response.data.userinfo));
+                    //     localStorage.setItem('token',response.data.token);
+                    //     if (localStorage.getItem('token') != null){
+                    //         this.$emit('loggedIn')
+                    //         if(this.$route.params.nextUrl != null){
+                    //             this.$router.push(this.$route.params.nextUrl)
+                    //         }
+                    //         else {
+                    //             this.$router.push('listproject');
+                    //         }
+                    //     }                 
+                    // }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        }
+    }
 </script>

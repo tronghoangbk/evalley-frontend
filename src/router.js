@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+// import VueAxios from 'vue-axios'
 Vue.use(Router)
 
 export default new Router({
@@ -10,7 +10,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: () => import(/* webpackChunkName: "about" */ './views/Home.vue'),
+      component: () => import( './views/Home.vue'),
       meta: {
         layout: 'default'
       }
@@ -18,7 +18,7 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: () => import(/* webpackChunkName: "about" */ './views/Login.vue'),
+      component: () => import( './views/Login.vue'),
       meta: {
         layout: 'auth'
       }
@@ -26,7 +26,15 @@ export default new Router({
     {
       path: '/register',
       name: 'register',
-      component: () => import(/* webpackChunkName: "contact" */ './views/Register.vue'),
+      component: () => import( './views/Register.vue'),
+      meta: {
+        layout: 'auth'
+      }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import( './views/Profile.vue'),
       meta: {
         layout: 'auth'
       }

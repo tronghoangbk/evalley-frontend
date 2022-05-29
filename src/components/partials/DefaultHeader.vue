@@ -4,7 +4,7 @@
             <nav class="d-flex justify-content-between mb-2">
                 <ul class="header__navbar-list">
                     <li class="header__navbar-item">
-                        <span class="header__navbar-title--no-pointer">Kết nối</span>
+                        <span class="header__navbar-title--no-pointer">Connect</span>
                         <a href="" class="header__navbar-icon-link">
                         <i class="header__navbar-icon fab fa-facebook"></i>
                         </a>
@@ -91,7 +91,7 @@
                   Trợ giúp
                 </a>
               </li> -->
-                    <ul v-if="false" class="header__navbar-list">
+                    <ul v-if="user == ''" class="header__navbar-list">
                         <a class="header__navbar-item header__navbar-item--strong header__navbar-item--separate" href="register">
                             Đăng ký
                         </a>
@@ -102,7 +102,7 @@
                     
                     <li v-else class="header__navbar-item header__navbar-user">
                         <img src="../../assets/images/user.png" alt="" class="header__navbar-user-img"/>
-                        <span class="header__navbar-user-name">Tín Phạm</span>
+                        <span class="header__navbar-user-name">{{user.username}}</span>
                         <ul class="header__navbar-user-menu dropdown-menu">
                             <li class="dropdown-item">
                                 <a href="">Tài khoản của tôi</a>
@@ -115,7 +115,7 @@
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li class="dropdown-item">
-                                <a href="">Đăng xuất</a>
+                                <a @click="logout" href="">Đăng xuất</a>
                             </li>
                         </ul>
                     </li>
@@ -134,20 +134,20 @@
                         <div class="header__cart">
                             <div class="header__cart-wrap">
                                 <i class="header__cart-icon fas fa-shopping-cart"></i>
-                                <span class="header__cart-notice">32</span>
+                                <span class="header__cart-notice">{{cart.length}}</span>
                                 <!-- No cart : header__cart-list--no-cart -->
                                 <div class="header__cart-list ">
                                 <!-- Nocart -->
-                                <div v-if="false">
+                                <div v-if="!cart.length">
                                     <img src="../../assets/images/no-cart.png" alt="No Cart" class="header__cart-no-cart-img"/>
                                     <span class="header__cart-list-no-cart-msg">
                                         Chưa có sản phẩm
                                     </span>
                                 </div>
                                 <!-- Hascart -->
-                                <h4 v-if="true" class="header__cart-heading">Sản phẩm đã thêm</h4>
+                                <h4 v-if="cart.length" class="header__cart-heading">Sản phẩm đã thêm</h4>
                                 <!-- Cart item -->
-                                <ul v-if="true" class="header__cart-list-item">
+                                <ul v-if="cart.length" class="header__cart-list-item">
                                     <li v-for="index in 5" class="header__cart-item">
                                         <img src="../../assets/images/product001.png" alt="" class="header__cart-img" />
                                         <div class="header__cart-item-info">
@@ -168,8 +168,9 @@
                                             </div>
                                         </div>
                                     </li>
+                                    
                                 </ul>
-                                <a href="#" class="btn btn-primary header__cart-view-cart">Xem giỏ hàng</a>
+                                <a v-if="cart.length" href="#" class="btn btn-primary header__cart-view-cart">Xem giỏ hàng</a>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +184,30 @@
 
 <script>
 export default {
-    name: 'DefaultHeader'
+    name: 'DefaultHeader',
+    data () {
+        return {
+            user: '',
+            cart: [{},{}],
+        }
+    },
+    methods: {
+        logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+        }
+    },
+    created() {
+        if (localStorage.getItem('user')) {
+            this.user = JSON.parse(localStorage.getItem('user'));
+        }
+    },
+    updated() {
+        if (localStorage.getItem('cart')) {
+            this.cart = JSON.parse(localStorage.getItem('cart'));
+        }
+    }
+
 }
 </script>
 
@@ -972,7 +996,7 @@ export default {
 
 .header__cart-notice {
   position: absolute;
-  padding: 1px 3px;
+  padding: 1px 7px;
   top: -8px;
   right: -4px;
   font-size: 1rem;
@@ -1076,7 +1100,7 @@ export default {
 
 .header__cart-view-cart {
   float: right;
-  margin: 0 12px 12px 0;  
+  margin: 0px 12px 12px 0;  
 }
 
 

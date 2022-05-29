@@ -10,43 +10,52 @@
 
                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-                <form class="mx-1 mx-md-4">
+                <form class="mx-1 mx-md-4 needs-validation">
                 
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                     <div class="form-floating flex-fill mb-0">
-                      <input type="text" id="form3Example1c" class="form-control" />
-                      <label for="form3Example1c">Your Name</label>
+                      <input @click="focus" type="text" v-model="username" class="form-control" required minlength="6"/>
+                      <label >Username</label>
+                      <div class="invalid-feedback">
+                        Username must be at least 6 characters.
+                      </div>
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                     <div class="form-floating flex-fill mb-0">
-                      <input type="email" id="form3Example3c" class="form-control" />
-                      <label class="form-label" for="form3Example3c">Your Email</label>
+                      <input @click="focus" type="email" v-model="email" class="form-control" required placeholder="name@example.com"/>
+                      <label class="form-label">Your Email</label>
+                      <div class="invalid-feedback">
+                        Email is required.
+                      </div>
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-floating flex-fill mb-0">
-                      <input type="password" id="form3Example4c" class="form-control" />
-                      <label class="form-label" for="form3Example4c">Password</label>
+                      <input @click="focus" type="password" v-model="password" class="form-control" required minlength="6"/>
+                      <label class="form-label">Password</label>
+                      <div class="invalid-feedback">
+                        Password must be at least 6 characters.
+                      </div>
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                     <div class="form-floating flex-fill mb-0">
-                      <input type="password" id="form3Example4cd" class="form-control" />
-                      <label class="form-label" for="form3Example4cd">Repeat your password</label>
+                      <input @click="focus" type="password" v-model="password2" class="form-control" required minlength="6"/>
+                      <label class="form-label">Repeat your password</label>
                     </div>
                   </div>
 
 
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button type="button" class="btn btn-primary btn-lg">Register</button>
+                    <button type="button" class="btn btn-primary btn-lg" @click="handleSubmit">Register</button>
                   </div>
 
                 </form>
@@ -67,44 +76,59 @@
 </section>
 </template>
 <script>
-    // const {BASE_URL} =  require('../utils/config')
-    // export default {
-    //     data(){
-    //         return {
-    //             email : "",
-    //             password : ""
-    //         }
-    //     },
-    //     methods : {
-    //         handleSubmit(e){
-    //             e.preventDefault()
-    //             if (this.password.length > 0) {
-    //                 this.$http.post(`${BASE_URL}/user/login`, {
-    //                     username: this.email,
-    //                     password: this.password
-    //                 })
-    //                 .then(response => {
-    //                     console.log(response.data.userinfo)
-    //                     if(response.data.userinfo){
-    //                         console.log("1")
-    //                         localStorage.setItem('user',JSON.stringify(response.data.userinfo));
-    //                         localStorage.setItem('token',response.data.token);
-    //                         if (localStorage.getItem('token') != null){
-    //                             this.$emit('loggedIn')
-    //                             if(this.$route.params.nextUrl != null){
-    //                                 this.$router.push(this.$route.params.nextUrl)
-    //                             }
-    //                             else {
-    //                                 this.$router.push('listproject');
-    //                             }
-    //                         }                 
-    //                     }
-    //                 })
-    //                 .catch(function (error) {
-    //                     console.error(error.response);
-    //                 });
-    //             }
-    //         }
-    //     }
-    // }
+    const {BASE_URL} =  require('../utils/config')
+    export default {
+        data(){
+            return {
+                username:'',
+				email:'',
+				password:'',
+				password2:''
+            }
+        },
+        methods : {
+            handleSubmit(e){
+                e.preventDefault()
+				this.$http.post(`${BASE_URL}/user/register`,{
+					username:this.username,
+					email:this.email,
+					password:this.password,
+					password2:this.password2
+				}).then(res=>{
+                    console.log(res.data)
+					if(res.data.success){
+                        console.log(1)
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Please check your mailbox!',
+                            confirmButtonColor: 'var(--primary-color)',
+                            confirmButtonText: 'OK',
+                        }).then((result) => {
+                            if (result.value) {
+                                this.$router.push('/login')
+                            }
+                        })
+                    }
+                    else{
+                        console.log(2)
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Error',
+                            text: `${res.data[0].msg}`,
+                            confirmButtonColor: 'var(--primary-color)',
+                            confirmButtonText: 'Close',
+                        });
+                        
+                    }
+					
+				}).catch(err=>{
+					console.log(err)
+				})
+            },
+            focus(){
+                document.querySelectorAll('.needs-validation')[0].classList.add('was-validated')
+            }
+        }
+    }
 </script>
