@@ -1,5 +1,5 @@
 <template>
-    <a :href="`/product/{{id}}`" class="home-product-item">
+    <a :href="'/product/'+id" class="home-product-item">
         <div class="home-product-item__img" :style="{backgroundImage: `url(${image})`}"></div>
         <span class="home-product-item__name">{{name}}</span>
         <div class="home-product-item__price">

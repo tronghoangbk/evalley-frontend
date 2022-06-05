@@ -10,7 +10,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: () => import( './views/Home.vue'),
+      component: () => import('./views/customer/Home.vue'),
       meta: {
         layout: 'default'
       }
@@ -18,7 +18,7 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: () => import( './views/Login.vue'),
+      component: () => import('./views/Login.vue'),
       meta: {
         layout: 'auth'
       }
@@ -26,7 +26,7 @@ export default new Router({
     {
       path: '/register',
       name: 'register',
-      component: () => import( './views/Register.vue'),
+      component: () => import('./views/Register.vue'),
       meta: {
         layout: 'auth'
       }
@@ -34,7 +34,15 @@ export default new Router({
     {
       path: '/profile',
       name: 'profile',
-      component: () => import( './views/Profile.vue'),
+      component: () => import('./views/customer/Profile.vue'),
+      meta: {
+        layout: 'auth'
+      }
+    },
+    {
+      path: '/activate/:username/:token',
+      name: 'activate',
+      component: () => import('./views/Activate.vue'),
       meta: {
         layout: 'auth'
       }

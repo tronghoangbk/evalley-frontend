@@ -1,5 +1,6 @@
 /********** Template CSS **********/
 :root {
+    -primary: #00b074;
     --light: #EFFDF5;
     --dark: #2B3940;
     --gold: #FFCE00;
@@ -37,8 +38,7 @@
 
 /*** Button ***/
 .btn {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
+    font-weight: 300;
     transition: .5s;
 }
 
