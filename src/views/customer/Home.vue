@@ -4,7 +4,27 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="d-none d-sm-none d-lg-block col-lg-3 col-xxl-2">category</div>
+        <div class="d-none d-sm-none d-lg-block col-lg-3 col-xxl-2 bg-white pt-3">
+          <span class="h4 text-muted">Category</span>
+          <div class="accordion mt-3" id="category">
+            <div v-for="(category, index) in categories" v-if="category.parent == 'root'" class="accordion-item">
+              <h2 class="accordion-header" :id="'heading'+index">
+                <button class="accordion-button p-2" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse'+index" aria-expanded="true" :aria-controls="'collapse'+index">
+                  {{category.name}}
+                </button>
+              </h2>
+              <div :id="'collapse'+index" class="accordion-collapse collapse show" :aria-labelledby="'heading'+index" data-bs-parent="#category">
+                <div class="accordion-body py-2">
+                  <ul class="m-0">
+                    <li v-for="child in categories" v-if="child.parent == category.name">
+                      <a href="#">{{child.name}}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="col">
           <div class="row home-filter">
             <span class="col-auto fs-6 mt-2 p-1">Sắp xếp theo</span>
@@ -16,7 +36,7 @@
                 <button class="nav-link border" href="#">Top product</button>
               </li>
             </ul>
-            <div class="select-input col-auto mt-2">
+            <div class="select-input col mt-2">
               <span class="select-input__label">Giá</span>
               <i class="select-input__icon fas fa-angle-down"></i>
               <!-- List option -->
@@ -86,8 +106,8 @@
               </Product>
             </div>
           </div>
-
-          <div class="mt-4">
+          <div class="row">
+          <div class="mt-4 bg-white p-2 mb-n2 rounded-3 shadow bg-body rounded">
             <small class="display-6 text-muted mt-4 d-inline">For you</small>
                 <a href="" class="blockquote float-end me-4">
                     See all <i class="home-filter__page-icon fas fa-angle-right"></i>
@@ -95,7 +115,7 @@
           </div>
 
           <div
-            class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2-4"
+            class="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-3 col-xxl-2-4 p-1"
             v-for="product in foryou"
             :key="product._id">
             <Product
@@ -113,6 +133,7 @@
             >
             </Product>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -137,14 +158,17 @@ export default {
       result: [],
       recommended: [],
       foryou: [],
+      categories: [],
     };
   },
-  beforeCreate() {
+  created() {
     this.$http.get(`${BASE_URL}/product/getall`)
       .then((res) => {
         this.products = res.data.filter(
           (product) => product.quantity > 0 && product.status === "active"
         );
+        this.onsale = this.products.filter((product) => product.price_sale !== null);
+        this.foryou = this.products
         /*this.products.forEach((product) => {
           if (product.sale_start < new Date() && product.sale_end > new Date() && product.price_sale != null) {
             this.onsale.push(product);
@@ -154,8 +178,14 @@ export default {
       .catch((err) => {
         console.log(err);
       });
-      this.onsale = this.products.filter((product) => product.price_sale !== null);
-      this.foryou = this.products
+    this.$http.get(`${BASE_URL}/category/getall`)
+      .then((res) => {
+        this.categories = res.data;
+        console.log(this.categories);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   methods: {
     incPage() {
