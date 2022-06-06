@@ -1,5 +1,5 @@
 <template>
-    <header class="header mb-4">
+    <header class="header mb-2">
         <div class="container">
             <nav class="d-flex justify-content-between mb-2">
                 <ul class="header__navbar-list">
@@ -92,9 +92,9 @@
                 </a>
               </li> -->
                     <ul v-if="user == ''" class="header__navbar-list">
-                        <a class="header__navbar-item header__navbar-item--strong header__navbar-item--separate" href="register">
+                        <!-- <a class="header__navbar-item header__navbar-item--strong header__navbar-item--separate" href="register">
                             Đăng ký
-                        </a>
+                        </a> -->
                         <a class="header__navbar-item header__navbar-item--strong" href="login">
                             Đăng Nhập
                         </a>

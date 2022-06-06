@@ -13,7 +13,7 @@
                   {{category.name}}
                 </button>
               </h2>
-              <div :id="'collapse'+index" class="accordion-collapse collapse show" :aria-labelledby="'heading'+index" data-bs-parent="#category">
+              <div :id="'collapse'+index" class="accordion-collapse collapse" :aria-labelledby="'heading'+index" data-bs-parent="#category">
                 <div class="accordion-body py-2">
                   <ul class="m-0">
                     <li v-for="child in categories" v-if="child.parent == category.name">
@@ -29,11 +29,11 @@
           <div class="row home-filter">
             <span class="col-auto fs-6 mt-2 p-1">Sắp xếp theo</span>
             <ul class="col-auto nav nav-pills nav-fill mt-2">
-              <li class="nav-item ms-2">
-                <button class="nav-link border active" href="#">Rating</button>
+              <li class="nav-item ms-1">
+                <button class="nav-link btn-sm border active" href="#">Rating</button>
               </li>
               <li class="nav-item ms-2">
-                <button class="nav-link border" href="#">Top product</button>
+                <button class="nav-link btn-sm border" href="#">Top product</button>
               </li>
             </ul>
             <div class="select-input col mt-2">
@@ -48,34 +48,6 @@
                   <a href="#" class="select-input__link">Giá: Cao đến Thấp</a>
                 </li>
               </ul>
-            </div>
-            <div class="col-auto home-filter__page mt-2">
-              <span class="home-filter__page-num">
-                <span class="home-filter__page-current">{{ page }}</span
-                >/{{ maxPage }}
-              </span>
-              <div class="home-filter__page-control">
-                <a
-                  @click="decPage"
-                  :class="
-                    page > 1
-                      ? 'home-filter__page-btn'
-                      : 'home-filter__page-btn home-filter__page-btn--disabled'
-                  "
-                >
-                  <i class="home-filter__page-icon fas fa-angle-left"></i>
-                </a>
-                <a
-                  @click="incPage"
-                  :class="
-                    page !== maxPage
-                      ? 'home-filter__page-btn'
-                      : 'home-filter__page-btn home-filter__page-btn--disabled'
-                  "
-                >
-                  <i class="home-filter__page-icon fas fa-angle-right"></i>
-                </a>
-              </div>
             </div>
           </div>
           <div class="row">
@@ -134,6 +106,17 @@
             </Product>
           </div>
         </div>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center mt-4">
+            <li :class="page==1?'page-item disabled':'page-item'">
+              <a class="page-link" @click="page-=1" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li v-for="index in maxPage" :class="index == page?'page-item active':'page-item'"><a class="page-link" @click="page=index">{{index}}</a></li>
+            <li :class="page==maxPage?'page-item disabled':'page-item'">
+              <a class="page-link" @click="page+=1" tabindex="-1" aria-disabled="true">Next</a>
+            </li>
+          </ul>
+        </nav>
         </div>
       </div>
     </div>
@@ -150,7 +133,7 @@ export default {
   data() {
     return {
       page: 1,
-      maxPage: 2,
+      maxPage: 10,
       sort: "",
       category: "",
       products: [],
@@ -224,7 +207,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.04);
   display: flex;
   align-items: center;
-  padding: 12px 22px;
+  padding: 12px 15px;
   border-radius: 2px;
 }
 .home-filter__page {
@@ -280,7 +263,7 @@ export default {
 }
 .select-input {
   min-width: 180px;
-  max-width: 400px;
+  max-width: 300px;
   height: 40px;
   padding: 0 12px;
   border-radius: 2px;
