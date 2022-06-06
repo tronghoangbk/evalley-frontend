@@ -4,22 +4,19 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="d-none d-sm-none d-lg-block col-lg-3">category</div>
-        <div class="row col">
+        <div class="d-none d-sm-none d-lg-block col-lg-3 col-xxl-2">category</div>
+        <div class="col">
           <div class="row home-filter">
-            <span class="col-auto fs-6 mt-2">Sắp xếp theo</span>
+            <span class="col-auto fs-6 mt-2 p-1">Sắp xếp theo</span>
             <ul class="col-auto nav nav-pills nav-fill mt-2">
-              <li class="nav-item mx-2">
-                <button class="nav-link border me-2 active" href="#">Rating</button>
+              <li class="nav-item ms-2">
+                <button class="nav-link border active" href="#">Rating</button>
               </li>
-              <li class="nav-item mx-2">
-                <button class="nav-link border me-2" href="#">Top product</button>
-              </li>
-              <li class="nav-item mx-2">
-                <button class="nav-link border me-2" href="#">Link</button>
+              <li class="nav-item ms-2">
+                <button class="nav-link border" href="#">Top product</button>
               </li>
             </ul>
-            <div class="select-input col mt-2 me-3">
+            <div class="select-input col-auto mt-2">
               <span class="select-input__label">Giá</span>
               <i class="select-input__icon fas fa-angle-down"></i>
               <!-- List option -->
@@ -61,31 +58,33 @@
               </div>
             </div>
           </div>
-          <div class="mt-4 bg-white p-2 mb-n2 rounded-3 shadow bg-body rounded">
-            <small class="display-6 text-muted mt-4 d-inline">On sale</small>
-            <a href="" class="blockquote float-end align-middle m-2">
-                See all <i class="home-filter__page-icon fas fa-angle-right"></i>
-            </a>
-          </div>
-
-          <div
-            class="col-sm-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2-4 p-1"
-            v-for="product in onsale"
-            :key="product._id">
-            <Product
-              :name="product.name"
-              :price_sale="product.price_sale"
-              :price="product.price"
-              :image="product.image"
-              :brand="product.brand"
-              :tag="product.tag"
-              :origin="product.origin"
-              :rating="product.rating"
-              :quantity="product.quantity"
-              :id="product._id"
-              :is_favourite="product.is_favourite"
-            >
-            </Product>
+          <div class="row">
+            <div class="mt-4 bg-white p-2 mb-n2 rounded-3 shadow bg-body rounded">
+              <small class="display-6 text-muted mt-4 d-inline">On sale</small>
+              <a href="" class="blockquote float-end align-middle m-2">
+                  See all <i class="home-filter__page-icon fas fa-angle-right"></i>
+              </a>
+            </div>
+  
+            <div 
+              class="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-3 col-xxl-2-4 p-1"
+              v-for="product in onsale"
+              :key="product._id">
+              <Product
+                :name="product.name"
+                :price_sale="product.price_sale"
+                :price="product.price"
+                :image="product.image"
+                :brand="product.brand"
+                :tag="product.tag"
+                :origin="product.origin"
+                :rating="product.rating"
+                :quantity="product.quantity"
+                :id="product._id"
+                :is_favourite="product.is_favourite"
+              >
+              </Product>
+            </div>
           </div>
 
           <div class="mt-4">
@@ -96,7 +95,7 @@
           </div>
 
           <div
-            class="col-sm-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2-4"
+            class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2-4"
             v-for="product in foryou"
             :key="product._id">
             <Product
@@ -137,23 +136,26 @@ export default {
       onsale: [],
       result: [],
       recommended: [],
+      foryou: [],
     };
   },
   beforeCreate() {
-    this.$http
-      .get(`${BASE_URL}/product/getall`)
+    this.$http.get(`${BASE_URL}/product/getall`)
       .then((res) => {
         this.products = res.data.filter(
           (product) => product.quantity > 0 && product.status === "active"
         );
-        this.onsale = this.products.filter(
-          (product) => product.price_sale !== null
-        );
-        this.foryou = this.products
+        /*this.products.forEach((product) => {
+          if (product.sale_start < new Date() && product.sale_end > new Date() && product.price_sale != null) {
+            this.onsale.push(product);
+          }
+        });*/
       })
       .catch((err) => {
         console.log(err);
       });
+      this.onsale = this.products.filter((product) => product.price_sale !== null);
+      this.foryou = this.products
   },
   methods: {
     incPage() {
@@ -170,12 +172,20 @@ export default {
 };
 </script>
 <style scoped>
+  .scrolling {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  } 
+  
+  .scrolling::-webkit-scrollbar{
+    width: 0;
+  }
 
 .home {
   margin-top: 150px;
   position: relative;
 }
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1500px) {
   .col-xxl-2-4 {
     width: 20%;
   }
@@ -196,7 +206,7 @@ export default {
 }
 
 .home-filter__page-num {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: var(--text-color);
   margin-right: 12px;
 }
@@ -239,9 +249,9 @@ export default {
   color: #555;
 }
 .select-input {
-  min-width: 200px;
+  min-width: 180px;
   max-width: 400px;
-  height: 42px;
+  height: 40px;
   padding: 0 12px;
   border-radius: 2px;
   background-color: var(--white-color);
@@ -252,11 +262,11 @@ export default {
 }
 
 .select-input__label {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .select-input__icon {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: rgb(131, 131, 131);
   position: relative;
   top: 1px;

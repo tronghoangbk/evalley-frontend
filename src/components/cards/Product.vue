@@ -11,10 +11,10 @@
             <i class="home-product-item__like-icon-empty far fa-heart" ></i>
             <i class="home-product-item__like-icon-fill fas fa-heart" ></i> </span>
             <div class="home-product-item__rating">
-            <i v-for="index in 5" v-key="index" v-if="index <= rating" class="home-product-item__star--gold fas fa-star" ></i>
+            <i v-for="index in 5" v-key="index" v-if="index <= Math.round(rating)" class="home-product-item__star--gold fas fa-star" ></i>
             <i v-else class="fas fa-star"></i>
             </div>
-            <div class="home-product-item__sold">{{quantity}} in stock</div>
+            <div class="home-product-item__sold">{{quantity}} pieces</div>
         </div>
         <div class="home-product-item__origin">
             <span class="home-product-item__brand">{{brand}}</span>
@@ -114,12 +114,12 @@ export default {
 }
 .home-product-item__price-old {
     margin-left: 10px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #666;
     text-decoration: line-through;
 }
 .home-product-item__price-current {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: var(--primary-color);
     margin-left: 10px;
 }
@@ -130,6 +130,7 @@ export default {
 }
 .home-product-item__like {
     font-size: 0.9rem;
+    margin-right: 3px;
 }
 
 .home-product-item__like--liked .home-product-item__like-icon-fill {
@@ -161,6 +162,7 @@ i.home-product-item__like-icon-fill {
   font-size: 1rem;
   color: #666;
   margin-left: 3px;
+  line-break: 20px;
 }
 
 .home-product-item__origin {
