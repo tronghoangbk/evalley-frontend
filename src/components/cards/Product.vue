@@ -1,10 +1,10 @@
 <template>
     <a :href="'/product/'+id" class="home-product-item">
-        <div class="home-product-item__img" :style="{backgroundImage: `url(${image})`}"></div>
+        <div class="home-product-item__img" :style="{'background-image': `url(${require('@/assets/images/'+image)})`}"></div>
         <span class="home-product-item__name">{{name}}</span>
         <div class="home-product-item__price">
-            <span v-if="is_sale" class="home-product-item__price-old">${{price}}</span>
-            <span class="home-product-item__price-current">${{price_sale}}</span>
+            <span v-if="is_sale" class="home-product-item__price-old">{{price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}đ</span>
+            <span class="home-product-item__price-current">{{price_sale.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}đ</span>
         </div>
         <div class="home-product-item__action">
             <span class="home-product-item__like home-product-item__like--liked" >
@@ -56,14 +56,15 @@ export default {
         
     },
     created(){
-        if (this.price_sale != ''){
-            this.sale_off_percent = Math.round((1 - this.price_sale/this.price)*100)
+        if (this.price_sale != null){
+            this.sale_off_percent = Math.floor((1 - this.price_sale/this.price)*100)
             this.is_sale = true
         }
         else{
             this.is_sale = false
             this.price_sale = this.price
         }
+        this.image = 'product001.png'
         console.log(this.image)
     }
 }
@@ -87,7 +88,7 @@ export default {
     transform: translateY(-1px);
 }
 .home-product-item__img {
-    padding-top: 100%;
+    padding-top: 90%;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -96,7 +97,6 @@ export default {
 }
 .home-product-item__name {
     font-size: 1.2rem;
-    font-weight: 450;
     color: var(--primary-color);
     line-height: 1.5rem;
     margin: 10px 10px 6px;
@@ -114,12 +114,12 @@ export default {
 }
 .home-product-item__price-old {
     margin-left: 10px;
-    font-size: 1.4rem;
+    font-size: 1rem;
     color: #666;
     text-decoration: line-through;
 }
 .home-product-item__price-current {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     color: var(--primary-color);
     margin-left: 10px;
 }
@@ -129,8 +129,7 @@ export default {
     margin: 6px 10px 0;
 }
 .home-product-item__like {
-    font-size: 1rem;
-    padding-top: 3px;
+    font-size: 0.9rem;
 }
 
 .home-product-item__like--liked .home-product-item__like-icon-fill {
@@ -147,12 +146,11 @@ i.home-product-item__like-icon-fill {
 }
 
 .home-product-item__rating {
-  font-size: 1rem;
+  font-size: 0.9rem;
   transform: scale(1);
   transform-origin: right;
   color: #d5d5d5;
   margin: -1px 0 0 auto;
-  padding-top: 3px;
 }
 
 .home-product-item__star--gold {
@@ -160,7 +158,7 @@ i.home-product-item__like-icon-fill {
 }
 
 .home-product-item__sold {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #666;
   margin-left: 3px;
 }

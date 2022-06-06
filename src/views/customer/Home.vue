@@ -1,145 +1,185 @@
 <template>
-    <div class="home">
-        <!-- Carousel Start -->
-        
-        <div class="container-fluid">
-            <div class="row">
-                <div class="d-none d-sm-none d-lg-block col-lg-2">
-                    category
-                </div>
-                <div class="row col">
-                   <div class="row home-filter">
-                        <span class="col-auto fs-5 pt-1">Sắp xếp theo</span>
-                        <ul class="col-auto nav nav-pills nav-fill">
-                            <li class="nav-item mx-2">
-                                <button class="nav-link border me-2 active" href="#">Active</button>
-                            </li>
-                            <li class="nav-item mx-2">
-                                <button class="nav-link border me-2" href="#">Link</button>
-                            </li>
-                            <li class="nav-item mx-2">
-                                <button class="nav-link border me-2" href="#">Link</button>
-                            </li>
-                        </ul>
-                        <div class="select-input col">
-                            <span class="select-input__label">Giá</span>
-                            <i class="select-input__icon fas fa-angle-down"></i>
-                            <!-- List option -->
-                            <ul class="select-input__list">
-                                <li class="select-input__item">
-                                    <a href="#" class="select-input__link">Giá: Thấp đến Cao</a>
-                                </li>
-                                <li class="select-input__item">
-                                <a href="#" class="select-input__link">Giá: Cao đến Thấp</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-auto home-filter__page">
-                            <span class="home-filter__page-num">
-                                <span class="home-filter__page-current">{{page}}</span>/{{maxPage}}
-                            </span>
-                            <div class="home-filter__page-control">
-                                <a @click="decPage" :class="page>1?'home-filter__page-btn':'home-filter__page-btn home-filter__page-btn--disabled'">
-                                    <i class="home-filter__page-icon fas fa-angle-left"></i>
-                                </a>
-                                <a @click="incPage" :class="page !== maxPage?'home-filter__page-btn':'home-filter__page-btn home-filter__page-btn--disabled'">
-                                    <i class="home-filter__page-icon fas fa-angle-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4"><small class="display-6 text-muted mt-4 d-inline">On sale</small><a href="" class="blockquote float-end me-4">See all <i class="home-filter__page-icon fas fa-angle-right"></i></a></div>
-                    
-                    <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2-4"
-                        v-for='product in onsale' :key="product._id" >
-                        <Product
-                            :name="product.name"
-                            :price_sale="product.price_sale"
-                            :price="product.price"
-                            :image="product.image"
-                            :brand="product.brand"
-                            :tag="product.tag"
-                            :origin="product.origin"
-                            :rating="product.rating"
-                            :quantity="product.quantity"
-                            :id="product._id"
-                            :is_favourite="product.is_favourite">
-                        </Product>
-                    </div>
-                    
-                    
-                </div>
+  <div class="home">
+    <!-- Carousel Start -->
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="d-none d-sm-none d-lg-block col-lg-3">category</div>
+        <div class="row col">
+          <div class="row home-filter">
+            <span class="col-auto fs-6 mt-2">Sắp xếp theo</span>
+            <ul class="col-auto nav nav-pills nav-fill mt-2">
+              <li class="nav-item mx-2">
+                <button class="nav-link border me-2 active" href="#">Rating</button>
+              </li>
+              <li class="nav-item mx-2">
+                <button class="nav-link border me-2" href="#">Top product</button>
+              </li>
+              <li class="nav-item mx-2">
+                <button class="nav-link border me-2" href="#">Link</button>
+              </li>
+            </ul>
+            <div class="select-input col mt-2 me-3">
+              <span class="select-input__label">Giá</span>
+              <i class="select-input__icon fas fa-angle-down"></i>
+              <!-- List option -->
+              <ul class="select-input__list">
+                <li class="select-input__item">
+                  <a href="#" class="select-input__link">Giá: Thấp đến Cao</a>
+                </li>
+                <li class="select-input__item">
+                  <a href="#" class="select-input__link">Giá: Cao đến Thấp</a>
+                </li>
+              </ul>
             </div>
+            <div class="col-auto home-filter__page mt-2">
+              <span class="home-filter__page-num">
+                <span class="home-filter__page-current">{{ page }}</span
+                >/{{ maxPage }}
+              </span>
+              <div class="home-filter__page-control">
+                <a
+                  @click="decPage"
+                  :class="
+                    page > 1
+                      ? 'home-filter__page-btn'
+                      : 'home-filter__page-btn home-filter__page-btn--disabled'
+                  "
+                >
+                  <i class="home-filter__page-icon fas fa-angle-left"></i>
+                </a>
+                <a
+                  @click="incPage"
+                  :class="
+                    page !== maxPage
+                      ? 'home-filter__page-btn'
+                      : 'home-filter__page-btn home-filter__page-btn--disabled'
+                  "
+                >
+                  <i class="home-filter__page-icon fas fa-angle-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 bg-white p-2 mb-n2 rounded-3 shadow bg-body rounded">
+            <small class="display-6 text-muted mt-4 d-inline">On sale</small>
+            <a href="" class="blockquote float-end align-middle m-2">
+                See all <i class="home-filter__page-icon fas fa-angle-right"></i>
+            </a>
+          </div>
+
+          <div
+            class="col-sm-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2-4 p-1"
+            v-for="product in onsale"
+            :key="product._id">
+            <Product
+              :name="product.name"
+              :price_sale="product.price_sale"
+              :price="product.price"
+              :image="product.image"
+              :brand="product.brand"
+              :tag="product.tag"
+              :origin="product.origin"
+              :rating="product.rating"
+              :quantity="product.quantity"
+              :id="product._id"
+              :is_favourite="product.is_favourite"
+            >
+            </Product>
+          </div>
+
+          <div class="mt-4">
+            <small class="display-6 text-muted mt-4 d-inline">For you</small>
+                <a href="" class="blockquote float-end me-4">
+                    See all <i class="home-filter__page-icon fas fa-angle-right"></i>
+                </a>
+          </div>
+
+          <div
+            class="col-sm-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2-4"
+            v-for="product in foryou"
+            :key="product._id">
+            <Product
+              :name="product.name"
+              :price_sale="product.price_sale"
+              :price="product.price"
+              :image="product.image"
+              :brand="product.brand"
+              :tag="product.tag"
+              :origin="product.origin"
+              :rating="product.rating"
+              :quantity="product.quantity"
+              :id="product._id"
+              :is_favourite="product.is_favourite"
+            >
+            </Product>
+          </div>
         </div>
-        
-        
-      
+      </div>
     </div>
+  </div>
 </template>
 <script>
-    import Product from '@/components/cards/Product.vue'
-    const {BASE_URL} =  require('../../utils/config')
-    
-    export default {
-        components: {
-            Product
-        },
-        data(){
-            return {
-                page: 1,
-                maxPage: 2,
-                sort: '',
-                category: '',
-                products: [],
-                onsale: [],
-                result: [],
-                recommended: [],
+import Product from "@/components/cards/Product.vue";
+const { BASE_URL } = require("../../utils/config");
 
-
-            }
-        },
-        beforeCreate(){
-            this.$http.get(`${BASE_URL}/product/getall`)
-            .then(res => {
-                this.products = res.data.filter(product => product.quantity > 0 && product.status === 'active')
-                console.log(this.products)
-                console.log(this.products[0]._id)
-                this.onsale = this.products.filter(product => product.price_sale !== null)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-
-        },
-        methods: {
-            incPage(){
-                if(this.page < this.maxPage){
-                    this.page++
-                }
-            },
-            decPage(){
-                if(this.page > 1){
-                    this.page--
-                }
-            }
-        }
-    }
+export default {
+  components: {
+    Product,
+  },
+  data() {
+    return {
+      page: 1,
+      maxPage: 2,
+      sort: "",
+      category: "",
+      products: [],
+      onsale: [],
+      result: [],
+      recommended: [],
+    };
+  },
+  beforeCreate() {
+    this.$http
+      .get(`${BASE_URL}/product/getall`)
+      .then((res) => {
+        this.products = res.data.filter(
+          (product) => product.quantity > 0 && product.status === "active"
+        );
+        this.onsale = this.products.filter(
+          (product) => product.price_sale !== null
+        );
+        this.foryou = this.products
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+  methods: {
+    incPage() {
+      if (this.page < this.maxPage) {
+        this.page++;
+      }
+    },
+    decPage() {
+      if (this.page > 1) {
+        this.page--;
+      }
+    },
+  },
+};
 </script>
 <style scoped>
 
-
 .home {
-    margin-top: 150px;
-    position: relative;
+  margin-top: 150px;
+  position: relative;
 }
 @media only screen and (min-width: 1600px) {
-    .col-xxl-2-4 {
-        width: 20%;
-    }
+  .col-xxl-2-4 {
+    width: 20%;
+  }
 }
-
-
 .home-filter {
   background-color: rgba(0, 0, 0, 0.04);
   display: flex;
@@ -199,8 +239,8 @@
   color: #555;
 }
 .select-input {
-  min-width: 100px;
-  max-width: 300px;
+  min-width: 200px;
+  max-width: 400px;
   height: 42px;
   padding: 0 12px;
   border-radius: 2px;
@@ -222,7 +262,7 @@
   top: 1px;
 }
 
-.select-input:hover .select-input__list{
+.select-input:hover .select-input__list {
   display: block;
 }
 
@@ -240,17 +280,15 @@
   z-index: 1;
 }
 
-
 .select-input__link {
   text-decoration: none;
-  font-size: 1.4rem;
+  font-size: 1rem;
   color: var(--text-color);
   display: block;
   padding: 8px 0;
 }
 
-.select-input__link:hover{
+.select-input__link:hover {
   color: var(--primary-color);
 }
-
 </style>
