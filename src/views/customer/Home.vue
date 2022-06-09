@@ -57,7 +57,8 @@
                   See all <i class="home-filter__page-icon fas fa-angle-right"></i>
               </a>
             </div>
-  
+          </div>
+            <div class="row scrolling">
             <div 
               class="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-3 col-xxl-2-4 p-1"
               v-for="product in onsale"
@@ -77,15 +78,16 @@
               >
               </Product>
             </div>
-          </div>
+            </div>
           <div class="row">
-          <div class="mt-4 bg-white p-2 mb-n2 rounded-3 shadow bg-body rounded">
+          <div class="mt-2 bg-white p-2 mb-n2 rounded-3 shadow bg-body rounded">
             <small class="display-6 text-muted mt-4 d-inline">For you</small>
-                <a href="" class="blockquote float-end me-4">
+                <a href="" class="blockquote float-end align-middle m-2">
                     See all <i class="home-filter__page-icon fas fa-angle-right"></i>
                 </a>
           </div>
-
+          </div>
+          <div class="row scrolling">
           <div
             class="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-3 col-xxl-2-4 p-1"
             v-for="product in foryou"
@@ -111,7 +113,7 @@
             <li :class="page==1?'page-item disabled':'page-item'">
               <a class="page-link" @click="page-=1" tabindex="-1" aria-disabled="true">Previous</a>
             </li>
-            <li v-for="index in maxPage" :class="index == page?'page-item active':'page-item'"><a class="page-link" @click="page=index">{{index}}</a></li>
+            <li v-for="index in maxPage" :class="index == page?'page-item active':'page-item'" v-if="index < page + 3 & index > page - 3"><a class="page-link" @click="page=index">{{index}}</a></li>
             <li :class="page==maxPage?'page-item disabled':'page-item'">
               <a class="page-link" @click="page+=1" tabindex="-1" aria-disabled="true">Next</a>
             </li>
@@ -189,10 +191,9 @@ export default {
     overflow-x: auto;
     flex-wrap: nowrap;
   } 
-  
   .scrolling::-webkit-scrollbar{
-    width: 0;
-  }
+  width: 0;
+}
 
 .home {
   margin-top: 150px;
