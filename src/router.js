@@ -40,6 +40,22 @@ export default new Router({
       }
     },
     {
+      path: '/admin/dashboard',
+      name: 'dashboard',
+      component: () => import('./views/admin/Dashboard.vue'),
+      meta: {
+        layout: 'admin'
+      }
+    },
+    {
+      path: '/admin/user/list',
+      name: 'users-list',
+      component: () => import('./views/admin/UserManagement.vue'),
+      meta: {
+        layout: 'admin'
+      }
+    },
+    {
       path: '/activate/:username/:token',
       name: 'activate',
       component: () => import('./views/Activate.vue'),
