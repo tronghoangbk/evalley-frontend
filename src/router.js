@@ -53,6 +53,30 @@ export default new Router({
       meta: {
         layout: 'error'
       }
+    },
+    {
+      path: '/product',
+      name: 'product',
+      component: () => import('./views/Product-detail.vue'),
+      meta: {
+        layout: 'default'
+      }
+    },
+    {
+      path: '/mycart',
+      name: 'mycart',
+      component: () => import('./views/Mycart.vue'),
+      meta: {
+        layout: 'default'
+      }
+    },
+    {
+      path: '/payment',
+      name: 'payment',
+      component: () => import('./views/Payment.vue'),
+      meta: {
+        layout: 'default'
+      }
     }
   ]
 })
