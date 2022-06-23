@@ -237,7 +237,7 @@
                           id="browser"
                         />
                         <datalist id="voucher">
-                          <option value="MAGIAM30"></option>
+                          <option value="MAGIAM30- giam gia 20%"></option>
                           <option value="KHUYENMAI"></option>
                           <option value="DON0DONG"></option>
                         </datalist>

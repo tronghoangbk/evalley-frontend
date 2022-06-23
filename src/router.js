@@ -55,9 +55,9 @@ export default new Router({
       }
     },
     {
-      path: '/product',
+      path: '/product/:id',
       name: 'product',
-      component: () => import('./views/Product-detail.vue'),
+      component: () => import('./views/customer/Product-detail.vue'),
       meta: {
         layout: 'default'
       }
@@ -65,7 +65,7 @@ export default new Router({
     {
       path: '/mycart',
       name: 'mycart',
-      component: () => import('./views/Mycart.vue'),
+      component: () => import('./views/customer/Mycart.vue'),
       meta: {
         layout: 'default'
       }
@@ -73,7 +73,7 @@ export default new Router({
     {
       path: '/payment',
       name: 'payment',
-      component: () => import('./views/Payment.vue'),
+      component: () => import('./views/customer/Payment.vue'),
       meta: {
         layout: 'default'
       }

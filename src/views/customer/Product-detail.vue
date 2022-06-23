@@ -1,5 +1,5 @@
 <template>
-  <div class="container container-product">
+  <div class="container-fluid container-product">
     <div class="row d-flex justify-content-center">
       <div class="col-md-10">
         <div class="card">
@@ -33,18 +33,42 @@
                   <p></p>
                   <h7 class="text-uppercase">Quantity Left:{{ quantity }}</h7>
                   <p></p>
-                  <div class="price d-flex flex-row align-items-center">
-                    <span class="text-uppercase">Price: </span>
-                    <span class="act-price"> {{price_sale}}VND</span>
+                  <div
+                    v-if="is_sale"
+                    class="price d-flex flex-row align-items-center"
+                  >
+                    <span class="text-uppercase me-2">Price: </span>
+                    <span class="act-price me-2">
+                      {{
+                        
+                        price_sale
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                      }}VND</span
+                    >
                     <div class="ml-2">
-                      <small class="dis-price"> {{ price }}VND</small>
+                      <small class="dis-price me-2">
+                        {{
+                          price
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                        }}VND</small
+                      >
                       <span> {{ sale_off_percent }}% OFF</span>
                     </div>
                   </div>
-                  <!-- <div class="price d-flex flex-row align-items-center">
-                    <span class="text-uppercase">Price:  </span>
-                    <span class="act-price">20 VND {{price}}</span>
-                  </div> -->
+                  <div
+                    v-if="!is_sale"
+                    class="price d-flex flex-row align-items-center"
+                  >
+                    <span class="text-uppercase">Price:</span>
+                    <span class="act-price"
+                      >{{
+                        " " +
+                        price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                      }}VND
+                    </span>
+                  </div>
                 </div>
                 <p class="about">
                   {{ description }}
@@ -81,11 +105,10 @@
                     class="form-control"
                     min="1"
                     :value="quantitytoadd"
-                    @input="event => quantitytoadd = event.target.value"
-                  
+                    @input="(event) => (quantitytoadd = event.target.value)"
                   />
                   <button
-                    @click="quantitytoadd ++"
+                    @click="quantitytoadd++"
                     type="button"
                     class="btn btn-warning"
                   >
@@ -104,7 +127,7 @@
       </div>
     </div>
     <!--Comment Box  -->
-    <div class="container mt-5 mb-5">
+    <div class="container-fluid mt-5 mb-5">
       <div class="row height d-flex justify-content-center align-items-center">
         <div class="col-sm-10 col-md-10 col-lg-">
           <div class="card-cmt">
@@ -121,41 +144,17 @@
               <textarea
                 class="form-control item-cmt"
                 aria-label="With textarea "
-                @input="event => textCmt = event.target.value"
+                @input="(event) => (textCmt = event.target.value)"
               ></textarea>
               <button class="btn btn-danger mr-2 px-2 item-cmt">Send</button>
             </div>
-
-            <div class="mt-2">
-              <div class="d-flex flex-row p-3">
-                <img
-                  src="https://i.imgur.com/zQZSWrt.jpg"
-                  width="40"
-                  height="40"
-                  class="rounded-circle mr-3"
-                />
-                <div class="w-100">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <div class="d-flex flex-row align-items-center">
-                      <h6>Brian selter</h6>
-                    </div>
-                    <small>12h ago</small>
-                  </div>
-                  <p class="text-justify comment-text mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam
-                  </p>
-                  <div class="d-flex flex-row user-feed">
-                    <button class="btn btn-danger mr-2 px-1">
-                      <i class="fas fa-comments"></i> Reply
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Comment
+              :comment="'Greate Service!!!'"
+              :user_name="'Hoang Pham'"
+              :avatar="'user.png'"
+              :time="'12mins ago'"
+            >
+            </Comment>
           </div>
         </div>
       </div>
@@ -164,7 +163,12 @@
 </template>
 
 <script>
+import Comment from "@/components/cards/Comment.vue";
+const { BASE_URL } = require("../../utils/config");
 export default {
+  components: {
+    Comment,
+  },
   props: [
     "name",
     "price",
@@ -184,31 +188,43 @@ export default {
       sale_off_percent: 0,
       is_sale: false,
       quantitytoadd: 1,
-      textCmt: null
+      textCmt: null,
+      product: null,
     };
   },
   methods: {
-   decQuan(){
-    if(this.quantitytoadd>1){
-      this.quantitytoadd--;
-    }
-   }
+    decQuan() {
+      if (this.quantitytoadd > 1) {
+        this.quantitytoadd--;
+      }
+    },
   },
   created() {
-    this.image = "product001.png";
-    this.name = "T-Shirt Drew House";
-    this.brand = "Drew Fashion";
-    this.price = "300";
-    this.price_sale = "150";
-    this.description = "Shop from a wide range of t-shirt from orianz. Pefect for your everyday use, you could pair it with a stylish pair of jeansor trousers complete the look.Shop from a wide range oft-shirt from orianz. Pefect for your everyday use, you couldpair it with a stylish pair of jeans or trousers complete the look."; 
-    if (this.price_sale != null){
-            this.sale_off_percent = Math.floor((1 - this.price_sale/this.price)*100)
-            this.is_sale = true
+    var pro_id = this.$route.params.id;
+    this.$http
+      .get(`${BASE_URL}/product/detail/${pro_id}`)
+      .then((res) => {
+        this.image = "product001.png";
+        this.name = res.data.name;
+        this.brand = res.data.brand;
+        this.price = res.data.price;
+        this.price_sale = res.data.price_sale;
+        this.origin = res.data.origin;
+        this.description = res.data.description;
+        this.quantity = res.data.quantity;
+        if (this.price_sale != null) {
+          this.sale_off_percent = Math.floor(
+            (1 - this.price_sale / this.price) * 100
+          );
+          this.is_sale = true;
+        } else {
+          this.is_sale = false;
+          this.price_sale = this.price;
         }
-        else{
-            this.is_sale = false
-            this.price_sale = this.price
-        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 </script>
@@ -286,12 +302,12 @@ label.radio input:checked + span {
   width: 150px;
 }
 .card-cmt {
-  background-color: #fff;
+  background-color: #F9EBC8   ;
   border: none;
 }
 
 .form-color {
-  background-color: #ffff;
+  background-color: #FEFBE7;
 }
 
 .c-badge {
