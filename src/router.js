@@ -36,7 +36,7 @@ export default new Router({
       name: 'profile',
       component: () => import('./views/customer/Profile.vue'),
       meta: {
-        layout: 'auth'
+        layout: 'default'
       }
     },
     {

@@ -69,21 +69,13 @@
                 .then(response => {
                     console.log(response)
                     if (response.data.success) {
-                            localStorage.setItem('user', JSON.stringify(response.data.user))
-                            localStorage.setItem('token', response.data.token)
+                            localStorage.setItem('token', response.data.access_token)
                             if (localStorage.getItem('token') != null){
-                                this.$emit('loggedIn')
-                                if(this.$route.params.nextUrl != null){
-                                    this.$router.push(this.$route.params.nextUrl)
+                                if(response.data.role == 'admin'){
+                                    this.$router.push('/admin')
                                 }
                                 else {
-                                    var user = JSON.parse(localStorage.getItem('user'))
-                                    if(user.role == 'admin'){
-                                        this.$router.push('/admin')
-                                    }
-                                    else {
-                                        this.$router.push('/')
-                                    }
+                                    this.$router.push('/')
                                 }
                             }            
                    

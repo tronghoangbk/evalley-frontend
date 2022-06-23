@@ -105,7 +105,7 @@
                         <span class="header__navbar-user-name">{{user.username}}</span>
                         <ul class="header__navbar-user-menu dropdown-menu">
                             <li class="dropdown-item">
-                                <a href="">Tài khoản của tôi</a>
+                                <a href="/profile">My Profile</a>
                             </li>
                             <li class="dropdown-item">
                                 <a href="">Địa chỉ của tôi</a>
@@ -183,6 +183,7 @@
 </template>
 
 <script>
+const { BASE_URL } = require("../../utils/config");
 export default {
     name: 'DefaultHeader',
     data () {
@@ -192,14 +193,22 @@ export default {
         }
     },
     methods: {
-        logout() {
-            localStorage.removeItem('user');
+        logout(e) {
             localStorage.removeItem('token');
         }
     },
     created() {
-        if (localStorage.getItem('user')) {
-            this.user = JSON.parse(localStorage.getItem('user'));
+        var token = localStorage.getItem('token');
+        if (token) {
+            this.$http.post(`${BASE_URL}/user/me`,{
+                token: token,
+            })
+            .then(response => {
+                if(response.data.success){
+                    this.user = response.data.user;
+                    localStorage.setItem('user', JSON.stringify(this.user));
+                }
+            })
         }
     },
     updated() {
@@ -212,9 +221,6 @@ export default {
 </script>
 
 <style scoped>
-.app{
-  overflow: hidden;
-}
 
 .header {
     position: fixed;
@@ -222,7 +228,6 @@ export default {
     top: 0;
     right: 0;
     z-index: 100;
-    height: var(--header-height);
     background-image: linear-gradient(to right, var(--primary-color), #2b3940);
 }
 

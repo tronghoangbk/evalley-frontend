@@ -95,9 +95,8 @@
 					password:this.password,
 					password2:this.password2
 				}).then(res=>{
-                    console.log(res.data)
 					if(res.data.success){
-                        console.log(1)
+                        
                         Swal.fire({
                             icon: 'success',
                             title: 'Success',
@@ -111,7 +110,6 @@
                         })
                     }
                     else{
-                        console.log(2)
                         Swal.fire({
                             icon: 'info',
                             title: 'Error',

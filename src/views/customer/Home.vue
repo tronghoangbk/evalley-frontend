@@ -3,13 +3,13 @@
     <!-- Carousel Start -->
 
     <div class="container-fluid">
-      <div class="row">
-        <div class="d-none d-sm-none d-lg-block col-lg-3 col-xxl-2 bg-white pt-3">
+      <div class="row g-3">
+        <div class="d-none d-sm-none d-lg-block col-lg-3 col-xxl-2 bg-white p-3">
           <span class="h4 text-muted">Category</span>
           <div class="accordion mt-3" id="category">
             <div v-for="(category, index) in categories" v-if="category.parent == 'root'" class="accordion-item">
               <h2 class="accordion-header" :id="'heading'+index">
-                <button class="accordion-button p-2" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse'+index" aria-expanded="true" :aria-controls="'collapse'+index">
+                <button class="accordion-button p-2 collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse'+index" aria-expanded="false" :aria-controls="'collapse'+index">
                   {{category.name}}
                 </button>
               </h2>
@@ -25,7 +25,7 @@
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col px-4">
           <div class="row home-filter">
             <span class="col-auto fs-6 mt-2 p-1">Sắp xếp theo</span>
             <ul class="col-auto nav nav-pills nav-fill mt-2">
@@ -129,62 +129,61 @@ import Product from "@/components/cards/Product.vue";
 const { BASE_URL } = require("../../utils/config");
 
 export default {
-  components: {
-    Product,
-  },
-  data() {
-    return {
-      page: 1,
-      maxPage: 10,
-      sort: "",
-      category: "",
-      products: [],
-      onsale: [],
-      result: [],
-      recommended: [],
-      foryou: [],
-      categories: [],
+    components: {
+        Product,
+    },
+    data() {
+        return {
+            page: 1,
+            maxPage: 10,
+            sort: "",
+            category: "",
+            products: [],
+            onsale: [],
+            result: [],
+            recommended: [],
+            foryou: [],
+            categories: [],
+            loading: true,
+        };
+    },
+    created() {
+        this.$http.get(`${BASE_URL}/product/available`)
+        .then((res) => {
+            this.products = res.data;
+            this.onsale = this.products.filter((product) => product.price_sale !== null);
+            this.foryou = this.products
+            /*this.products.forEach((product) => {
+            if (product.sale_start < new Date() && product.sale_end > new Date() && product.price_sale != null) {
+                this.onsale.push(product);
+            }
+            });*/
+            this.loading = false;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+        this.$http.get(`${BASE_URL}/category/getall`)
+        .then((res) => {
+            this.categories = res.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    },
+    methods: {
+        incPage() {
+        if (this.page < this.maxPage) {
+            this.page++;
+        }
+        },
+        decPage() {
+        if (this.page > 1) {
+            this.page--;
+        }
+        }
+    }
     };
-  },
-  created() {
-    this.$http.get(`${BASE_URL}/product/getall`)
-      .then((res) => {
-        this.products = res.data.filter(
-          (product) => product.quantity > 0 && product.status === "active"
-        );
-        this.onsale = this.products.filter((product) => product.price_sale !== null);
-        this.foryou = this.products
-        /*this.products.forEach((product) => {
-          if (product.sale_start < new Date() && product.sale_end > new Date() && product.price_sale != null) {
-            this.onsale.push(product);
-          }
-        });*/
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    this.$http.get(`${BASE_URL}/category/getall`)
-      .then((res) => {
-        this.categories = res.data;
-        console.log(this.categories);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
-  methods: {
-    incPage() {
-      if (this.page < this.maxPage) {
-        this.page++;
-      }
-    },
-    decPage() {
-      if (this.page > 1) {
-        this.page--;
-      }
-    },
-  },
-};
 </script>
 <style scoped>
   .scrolling {
@@ -210,51 +209,6 @@ export default {
   align-items: center;
   padding: 12px 15px;
   border-radius: 2px;
-}
-.home-filter__page {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  right: 0;
-  position: relative;
-}
-
-.home-filter__page-num {
-  font-size: 1.2rem;
-  color: var(--text-color);
-  margin-right: 12px;
-}
-
-.home-filter__page-current {
-  color: var(--primary-color);
-}
-
-.home-filter__page-control {
-  border-radius: 2px;
-  overflow: hidden;
-  display: flex;
-  width: 72px;
-  height: 36px;
-}
-
-.home-filter__page-btn {
-  flex: 1;
-  background-color: var(--white-color);
-  display: flex;
-  text-decoration: none;
-}
-
-.home-filter__page-btn--disabled {
-  background-color: #f9f9f9;
-  cursor: not-allowed;
-}
-
-.home-filter__page-btn--disabled .home-filter__page-icon {
-  color: #ccc;
-}
-
-.home-filter__page-btn:first-child {
-  border-right: 1px solid #eee;
 }
 
 .home-filter__page-icon {
