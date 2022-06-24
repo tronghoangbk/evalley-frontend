@@ -5,6 +5,7 @@ import Axios from 'axios'
 import './assets/css/bootstrap.min.css';
 import './assets/css/style.css';
 import './assets/css/animate.min.css';
+
 Vue.prototype.$http = Axios
 Vue.config.productionTip = false
 
